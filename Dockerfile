@@ -5,4 +5,8 @@ FROM node:0.12.7
 RUN npm install -g aglio@latest
 
 
-ENTRYPOINT ["aglio"]
+# We need /bin/sh instead of aglio itself as the entrypoint so the
+# container can correctly interpret signals such as SIGINT. In the
+# original Dockerfile, a Ctrl-C didn't interrupt the process, so we're
+# forking the project so we can introduce this change.
+ENTRYPOINT ["/bin/sh", "-c"]
